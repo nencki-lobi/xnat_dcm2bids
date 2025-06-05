@@ -4,7 +4,7 @@
 ```
 python -m venv ./venv
 source venv/bin/activate
-pip install https://github.com/bkossows/xnat_dcm2bids/archive/refs/heads/master.zip
+pip install https://github.com/nencki-lobi/xnat_dcm2bids/archive/refs/heads/master.zip
 ```
 
 ## use
