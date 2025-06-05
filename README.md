@@ -29,13 +29,13 @@ xnat-dcm2bids [OPTIONS] SESSION_ID SUBJECT_ID SESSION_NUMBER
 | `--sourcedata TEXT`               | Path to DICOMs                                    | `{bids_dir}/sourcedata/{subject_id}` |
 
 
-### run single subject
+### Example: run single subject
 ```
 dcm2bids_scaffold -o ./bids-dir
 xnat-dcm2bids --bids-dir bids-dir --config ./config.json 55b4c571-cc33-4d pilot2 01
 ```
 
-### run multiple subjects
+### Example: run multiple subjects
 prepare csv as follows:
 ```
 23fa0001-b839-40,2025-06-04,MW25a,pilot3,01
