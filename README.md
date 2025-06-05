@@ -7,13 +7,35 @@ source venv/bin/activate
 pip install https://github.com/bkossows/xnat_dcm2bids/archive/refs/heads/master.zip
 ```
 
-## run
-```
-dcm2bids_scaffold -o ./bids-dir
-xnat-dcm2bids --bids-dir bids-dir --config ./config.json 55b4c571-cc33-4d 02 01
+## use
+
+```bash
+xnat-dcm2bids [OPTIONS] SESSION_ID SUBJECT_ID SESSION_NUMBER
 ```
 
-## run multiple subjects
+### Arguments:
+
+* `SESSION_ID` – XNAT session ID
+* `SUBJECT_ID` – BIDS subject ID (e.g., `01`)
+* `SESSION_NUMBER` – BIDS session number (e.g., `01`)
+
+### Options:
+
+| Option                            | Description                                       | Default                              |
+| --------------------------------- | ------------------------------------------------- | ------------------------------------ |
+| `--bids-dir TEXT`                 | Ścieżka do katalogu BIDS                          | `./bids-dir`                         |
+| `--auto_extract_entities BOOLEAN` | dcm2bids option; skips run label if not necessary | `True`                               |
+| `--config TEXT`                   | Path to `config.json`                             | `{bids_dir}/code/config.json`        |
+| `--sourcedata TEXT`               | Path to DICOMs                                    | `{bids_dir}/sourcedata/{subject_id}` |
+
+
+### run single subject
+```
+dcm2bids_scaffold -o ./bids-dir
+xnat-dcm2bids --bids-dir bids-dir --config ./config.json 55b4c571-cc33-4d pilot2 01
+```
+
+### run multiple subjects
 prepare csv as follows:
 ```
 23fa0001-b839-40,2025-06-04,MW25a,pilot3,01
