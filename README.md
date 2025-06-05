@@ -36,7 +36,7 @@ xnat-dcm2bids --bids-dir bids-dir --config ./config.json 55b4c571-cc33-4d pilot2
 ```
 
 ### Example: run multiple subjects
-prepare csv as follows:
+[prepare csv as follows](https://bkossows.notion.site/Export-XNAT-sessions-to-CSV-249fe8b66b5d42b98feb06897a92fea9):
 ```
 23fa0001-b839-40,2025-06-04,MW25a,pilot3,01
 55b4c571-cc33-4d,2025-06-04,MW25a,pilot2,01
