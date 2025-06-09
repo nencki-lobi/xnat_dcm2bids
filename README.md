@@ -48,7 +48,7 @@ and run
 MacOS/Linux:
 awk -F',' '{print $1, $4, $5}' subjects.csv | while read id sub ses; do xnat-dcm2bids --bids-dir bids-dir --config ./config.json "$id" "$sub" "$ses"; done
 Windows:
-for /f "tokens=1,4,5 delims=," %A in (subjects.csv) do xnat-dcm2bids --bids-dir bids-dir --config ./config.json %A %B %C
+for /f "usebackq skip=1 tokens=1,4,5 delims=," %A in ("subjects.csv") do xnat-dcm2bids --config config.json %A %B %C
 ```
 
 ## more 
