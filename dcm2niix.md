@@ -1,7 +1,7 @@
 ### dcm2niix customization
 
 
-1. Open **Anaconda Prompt** and start Python by typing:
+1. Open python command line by typing:
     ```
    python
     ```
