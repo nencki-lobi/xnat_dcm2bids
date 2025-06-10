@@ -54,5 +54,7 @@ for /f "usebackq skip=1 tokens=1,4,5 delims=," %A in ("subjects.csv") do xnat-dc
 ## more 
 - [dcm2niix customization](dcm2niix.md)
 
+- [troubleshooting](troubleshooting.md)
+
 
 
