@@ -9,10 +9,12 @@ setup(
         "dcm2bids",
         "xnatutils",
         "dcm2niix",
+        "pyxnat"
     ],
     entry_points={
         "console_scripts": [
-            "xnat-dcm2bids = xnat_dcm2bids.cli:main",
+            "xnat_dcm2bids=xnat_dcm2bids.cli:xnat_dcm2bids",
+            "save_csv=xnat_dcm2bids.cli:save_csv",
         ],
     },
 )

@@ -3,6 +3,8 @@ from pathlib import Path
 from .xnat_utils import download_session
 from .dcm2bids import run_dcm2bids
 from .fmriprep import repair_all_fieldmaps
+from .savecsv import savecsv
+
 
 @click.command(help="This tool downloads XNAT sessions and converts them to BIDS format i.e. {bids-dir}/sub-{subject_id}/ses-{session_number}/..\n"
                     "You can specify multiple XNAT session IDs if a subject's data is split across several sessions.\n"
@@ -15,8 +17,7 @@ from .fmriprep import repair_all_fieldmaps
 @click.option("--config", default=None, help="Path to config.json (default: {bids_dir}/code/config.json)")
 @click.option("--sourcedata", default=None, help="Each XNAT session is downloaded to a separate folder in this directory (default: {bids_dir}/sourcedata/)")
 @click.option("--auto_extract_entities", default=True, show_default=True, help="dcm2bids option i.e. skips run label if not neccesairy")
-
-def main(xnat_session_ids, subject_id, session_number, bids_dir, config, sourcedata, auto_extract_entities):
+def xnat_dcm2bids(xnat_session_ids, subject_id, session_number, bids_dir, config, sourcedata, auto_extract_entities):
     bids_dir = Path(bids_dir)
 
     if sourcedata is None:
@@ -44,5 +45,11 @@ def main(xnat_session_ids, subject_id, session_number, bids_dir, config, sourced
     click.echo("🟢 Repairing fieldmaps...")
     repair_all_fieldmaps( bids_dir / f"sub-{subject_id}" )
 
-if __name__ == "__main__":
-    main()
+@click.command(help="Download list of sessions from XNAT project and save to CSV")
+@click.argument("output_csv", type=click.Path())
+@click.argument("project_id", type=click.STRING)
+def save_csv(output_csv, project_id):
+    #download list of sessions from xnat
+    savecsv(output_csv, project_id)
+    click.echo(f"🟢 Data saved to {output_csv}")
+    
