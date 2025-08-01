@@ -3,3 +3,4 @@ bids-dir/
 config.json
 .DS_Store
 __pycache__/
+build/

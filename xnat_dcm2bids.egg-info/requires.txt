@@ -1,0 +1,4 @@
+click
+dcm2bids
+xnatutils
+dcm2niix

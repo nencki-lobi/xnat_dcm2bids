@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: xnat-dcm2bids
+Version: 0.1.0
+Requires-Dist: click
+Requires-Dist: dcm2bids
+Requires-Dist: xnatutils
+Requires-Dist: dcm2niix
+Dynamic: requires-dist
