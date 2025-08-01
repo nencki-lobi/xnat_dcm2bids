@@ -13,8 +13,9 @@ from .fmriprep import repair_all_fieldmaps
 @click.argument("session_number")
 @click.option("--bids-dir", default="./bids-dir", show_default=True, help="BIDS root directory")
 @click.option("--config", default=None, help="Path to config.json (default: {bids_dir}/code/config.json)")
-@click.option("--sourcedata", default=None, help="Folder where DICOMs will be downloaded (default: {bids_dir}/sourcedata/)")
+@click.option("--sourcedata", default=None, help="Each XNAT session is downloaded to a separate folder in this directory (default: {bids_dir}/sourcedata/)")
 @click.option("--auto_extract_entities", default=True, show_default=True, help="dcm2bids option i.e. skips run label if not neccesairy")
+
 def main(xnat_session_ids, subject_id, session_number, bids_dir, config, sourcedata, auto_extract_entities):
     bids_dir = Path(bids_dir)
 
@@ -29,13 +30,18 @@ def main(xnat_session_ids, subject_id, session_number, bids_dir, config, sourced
         config = Path(config)
 
     for session_id in xnat_session_ids:
-        click.echo(f"Pobieram dane dla sesji xnat: {session_id} do: {sourcedata}")
+        click.echo(f"🟢 Downloading {session_id} to {sourcedata}")
         download_session(session_id, output_dir=sourcedata)
 
-    click.echo(f"Uruchamiam dcm2bids dla subject {subject_id}, session {session_number}")
+    for session_id in xnat_session_ids:
+        if not (sourcedata / session_id ).exists():
+            click.echo(f"🛑 {session_id} not available for conversion. Skipping session...")
+            return
+        
+    click.echo(f"🟢 Running dcm2bids for subject {subject_id}, session {session_number}")
     run_dcm2bids(xnat_session_ids, subject_id, session_number, config, bids_dir, sourcedata, auto_extract_entities)
 
-    click.echo("Naprawiam fieldmapy...")
+    click.echo("🟢 Repairing fieldmaps...")
     repair_all_fieldmaps( bids_dir / f"sub-{subject_id}" )
 
 if __name__ == "__main__":

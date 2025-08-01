@@ -37,7 +37,7 @@ def repair_all_fieldmaps(subjects_dir: Path):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Użycie: python repair_fieldmaps.py /ścieżka/do/bids")
+        print("Usage: python repair_fieldmaps.py /path/to/bids")
         sys.exit(1)
 
     repair_all_fieldmaps(Path(sys.argv[1]))
