@@ -1,2 +1,0 @@
-[console_scripts]
-xnat-dcm2bids = xnat_dcm2bids.cli:main
