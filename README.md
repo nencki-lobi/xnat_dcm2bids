@@ -46,9 +46,9 @@ fd4197f4-72a3-48,2025-06-04,MW25a,pilot1,01
 and run
 ```
 MacOS/Linux:
-awk -F',' '{print $1, $4, $5}' subjects.csv | while read id sub ses; do xnat-dcm2bids --bids-dir bids-dir --config ./config.json "$id" "$sub" "$ses"; done
+while IFS=',' read -r id _ sub ses _; do xnat-dcm2bids --config ./config.json "$id" "$sub" "$ses"; done < subjects.csv
 Windows:
-for /f "usebackq skip=1 tokens=1,4,5 delims=," %A in ("subjects.csv") do xnat-dcm2bids --config config.json %A %B %C
+for /f "usebackq skip=1 tokens=1,3,4 delims=," %A in ("subjects.csv") do xnat-dcm2bids --config config.json %A %B %C
 ```
 
 ## more 
