@@ -1,9 +1,13 @@
 import click
+import subprocess
 from pathlib import Path
 from .xnat_utils import download_session
 from .dcm2bids import run_dcm2bids
 from .fmriprep import repair_all_fieldmaps
 from .savecsv import savecsv
+
+GITHUB_REPO_URL = "https://github.com/nencki-lobi/lobi-mri-scripts.git"
+SCRIPTS_DIR = Path.home() / "lobi-mri-scripts"
 
 
 @click.command(help="This tool downloads XNAT sessions and converts them to BIDS format i.e. {bids-dir}/sub-{subject_id}/ses-{session_number}/..\n"
@@ -48,8 +52,36 @@ def xnat_dcm2bids(xnat_session_ids, subject_id, session_number, bids_dir, config
 @click.command(help="Download list of sessions from XNAT project and save to CSV")
 @click.argument("output_csv", type=click.Path())
 @click.argument("project_id", type=click.STRING)
-def save_csv(output_csv, project_id):
+def xnat_getcsv(output_csv, project_id):
     #download list of sessions from xnat
     savecsv(output_csv, project_id)
     click.echo(f"🟢 Data saved to {output_csv}")
     
+@click.command(help="Run script from ~/lobi-mri-scripts/")
+@click.argument("script_name")
+@click.argument("args", nargs=-1)
+def lobi_script(script_name, args):
+    script_path = SCRIPTS_DIR / script_name
+
+    if not SCRIPTS_DIR.exists():
+        click.echo(f"🛑 Directory {SCRIPTS_DIR} does not exist")
+        subprocess.run(
+            ["git", "clone", GITHUB_REPO_URL, str(SCRIPTS_DIR)],
+            check=True
+        )
+        click.echo("✅ Scripts cloned.")
+
+    if not script_path.exists():
+        click.echo(f"🛑 Script {script_name} does not exist in {SCRIPTS_DIR}")
+        raise SystemExit(1)
+
+    # Make sure the script is executable
+    script_path.chmod(script_path.stat().st_mode | 0o111)
+
+    click.echo(f"▶️  Running script: {script_path} {' '.join(args)}")
+
+    try:
+        subprocess.run([str(script_path), *args], check=True)
+    except subprocess.CalledProcessError as e:
+        click.echo(f"🛑 Error running script: {e.returncode}")
+        raise SystemExit(e.returncode)
