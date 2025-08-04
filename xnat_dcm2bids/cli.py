@@ -80,7 +80,7 @@ def lobi_script(script_name, args):
     click.echo(f"▶️  Running script: {script_path} {' '.join(args)}")
 
     try:
-        subprocess.run([str(script_path), *args], check=True)
+        subprocess.run(["bash", "-l", "-c", str(script_path), *args], check=True)
     except subprocess.CalledProcessError as e:
         click.echo(f"🛑 Error running script: {e.returncode}")
         raise SystemExit(e.returncode)
