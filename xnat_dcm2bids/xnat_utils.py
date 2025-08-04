@@ -47,7 +47,7 @@ def savecsv(output_path, project_id):
 
     # Save the sorted list to csv file
     with open(output_path, mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.writer(file)
+        writer = csv.writer(file, lineterminator='\n')
         writer.writerow(['MR ID', 'Subject_ID', 'subject', 'session'])
         
         for data in experiment_data:
