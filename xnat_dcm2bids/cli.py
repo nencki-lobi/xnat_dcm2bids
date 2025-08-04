@@ -1,10 +1,9 @@
 import click
 import subprocess
 from pathlib import Path
-from .xnat_utils import download_session
+from .xnat_utils import download_session, savecsv
 from .dcm2bids import run_dcm2bids
 from .fmriprep import repair_all_fieldmaps
-from .savecsv import savecsv
 
 GITHUB_REPO_URL = "https://github.com/nencki-lobi/lobi-mri-scripts.git"
 SCRIPTS_DIR = Path.home() / "lobi-mri-scripts"
