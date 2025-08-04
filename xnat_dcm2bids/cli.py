@@ -22,7 +22,6 @@ SCRIPTS_DIR = Path.home() / "lobi-mri-scripts"
 @click.option("--sourcedata", default=None, help="Each XNAT session is downloaded to a separate folder in this directory (default: {bids_dir}/sourcedata/)")
 @click.option("--auto_extract_entities", default=True, show_default=True, help="dcm2bids option i.e. skips run label if not neccesairy")
 def xnat_dcm2bids(xnat_session_ids, subject_id, session_number, bids_dir, config, sourcedata, auto_extract_entities):
-def xnat_dcm2bids(xnat_session_ids, subject_id, session_number, bids_dir, config, sourcedata, auto_extract_entities):
     bids_dir = Path(bids_dir)
 
     if sourcedata is None:
