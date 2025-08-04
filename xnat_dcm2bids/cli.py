@@ -77,10 +77,11 @@ def lobi_script(script_name, args):
     # Make sure the script is executable
     script_path.chmod(script_path.stat().st_mode | 0o111)
 
-    click.echo(f"▶️  Running script: {script_path} {' '.join(args)}")
+    cmd = f"{script_path} {' '.join(args)}"
+    click.echo(f"▶️  Running: bash -l -c \"{cmd}\"")
 
     try:
-        subprocess.run(["bash", "-l", "-c", str(script_path), *args], check=True)
+        subprocess.run(["bash", "-l", "-c", cmd], check=True)
     except subprocess.CalledProcessError as e:
         click.echo(f"🛑 Error running script: {e.returncode}")
         raise SystemExit(e.returncode)
