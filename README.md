@@ -9,10 +9,10 @@
 This package consists of the following modules:
 
 * **`xnat_getcsv`** – downloads a list of all sessions for a given XNAT project and saves it to a CSV file:  
-`xnat_getcsv mj_ris.csv mj_ris`
+`xnat_getcsv -o mj_ris.csv mj_ris`
 
 * **`xnat_dcm2bids`** – downloads data from a selected XNAT session (e.g., `f490f566-2124-46`) and converts it to BIDS format using `dcm2bids`:  
-`xnat_dcm2bids --bids-dir ~/bids-dir --config ./code/config.json f490f566-2124-46 03 01`
+`xnat_dcm2bids --output-dir ~/bids-dir --config ./code/config.json f490f566-2124-46 03 01`
 
 * **`lobi_script`** – a shortcut for running scripts from the [lobi-mri-scripts](https://github.com/nencki-lobi/lobi-mri-scripts) repository:  
 `lobi_script run_mriqc.sh 03 ~/bids-dir ~/bids-dir/derivatives/mriqc`
@@ -51,9 +51,9 @@ pip install https://github.com/nencki-lobi/xnat_dcm2bids/archive/refs/heads/mast
 xnat_dcm2bids [OPTIONS] SESSION_ID SUBJECT_ID SESSION_NUMBER
 ```
 
-### Arguments:
+### Required arguments:
 
-* `SESSION_ID` – XNAT session ID
+* `SESSION_ID` – XNAT session IDs, multiple IDs can be specified
 * `SUBJECT_ID` – BIDS subject ID (e.g., `01`)
 * `SESSION_NUMBER` – BIDS session number (e.g., `01`)
 
@@ -61,17 +61,17 @@ xnat_dcm2bids [OPTIONS] SESSION_ID SUBJECT_ID SESSION_NUMBER
 
 | Option                            | Description                                       | Default                              |
 | --------------------------------- | ------------------------------------------------- | ------------------------------------ |
-| `--bids-dir TEXT`                 | Ścieżka do katalogu BIDS                          | `./bids-dir`                         |
+| `-o, --output-dir TEXT`                 | BIDS root directory                          | `./bids-dir`                         |
 | `--auto_extract_entities BOOLEAN` | dcm2bids option; skips run label if not necessary | `True`                               |
-| `--config TEXT`                   | Path to `config.json`                             | `{bids_dir}/code/config.json`        |
-| `--sourcedata TEXT`               | Path to DICOMs                                    | `{bids_dir}/sourcedata/{subject_id}` |
+| `-c, --config TEXT`                   | Path to `config.json`                             | `{bids_dir}/code/config.json`        |
+| `-d, --sourcedata TEXT`               | Path to main DICOMs' directory                                    | `{bids_dir}/sourcedata/` |
 
 ## examples
 
 ### Example: run single subject
 ```
 dcm2bids_scaffold -o ./bids-dir
-xnat_dcm2bids --bids-dir bids-dir --config ./config.json 55b4c571-cc33-4d pilot2 01
+xnat_dcm2bids --output-dir bids-dir --config ./config.json 55b4c571-cc33-4d pilot2 01
 ```
 
 ### Example: run multiple subjects
