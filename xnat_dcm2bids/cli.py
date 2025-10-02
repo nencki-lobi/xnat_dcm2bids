@@ -16,9 +16,9 @@ SCRIPTS_DIR = Path.home() / "lobi-mri-scripts"
 @click.argument("xnat_session_ids", nargs=-1)
 @click.argument("subject_id")
 @click.argument("session_number")
-@click.option("--bids-dir", default="./bids-dir", show_default=True, help="BIDS root directory")
-@click.option("--config", default=None, help="Path to config.json (default: {bids_dir}/code/config.json)")
-@click.option("--sourcedata", default=None, help="Each XNAT session is downloaded to a separate folder in this directory (default: {bids_dir}/sourcedata/)")
+@click.option("-o", "--output-dir", default="./bids-dir", show_default=True, help="BIDS root directory")
+@click.option("-c", "--config", default=None, help="Path to config.json (default: {bids_dir}/code/config.json)")
+@click.option("-d", "--sourcedata", default=None, help="Each XNAT session is downloaded to a separate folder in this directory (default: {bids_dir}/sourcedata/)")
 @click.option("--auto_extract_entities", default=True, show_default=True, help="dcm2bids option i.e. only when False You can overwrite entities with \"custom_entities\"")
 def xnat_dcm2bids(xnat_session_ids, subject_id, session_number, bids_dir, config, sourcedata, auto_extract_entities):
     bids_dir = Path(bids_dir)
@@ -49,8 +49,8 @@ def xnat_dcm2bids(xnat_session_ids, subject_id, session_number, bids_dir, config
     repair_all_fieldmaps( bids_dir / f"sub-{subject_id}" )
 
 @click.command(help="Download list of sessions from XNAT project and save to CSV")
-@click.argument("output_csv", type=click.Path())
 @click.argument("project_id", type=click.STRING)
+@click.option("-o", "--output-csv", default="./list.csv", show_default=True, type=click.Path(), help="Path to output CSV file")
 def xnat_getcsv(output_csv, project_id):
     #download list of sessions from xnat
     savecsv(output_csv, project_id)
@@ -69,6 +69,14 @@ def lobi_script(script_name, args):
             check=True
         )
         click.echo("✅ Scripts cloned.")
+    
+    if script_name == "ls":
+        click.echo(f"Scripts in {SCRIPTS_DIR}:")
+        for script in sorted(Path(SCRIPTS_DIR).glob('*.sh')):
+            click.echo(f"{script.name}")
+            #first_line = script.read_text().split('\n')[0].strip()
+            #click.echo(f"  {first_line}")
+        return
 
     if not script_path.exists():
         click.echo(f"🛑 Script {script_name} does not exist in {SCRIPTS_DIR}")
