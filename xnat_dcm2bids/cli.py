@@ -2,7 +2,7 @@ import click
 import subprocess
 from pathlib import Path
 from .xnat_utils import download_session, savecsv
-from .dcm2bids import run_dcm2bids
+from .dcm2bids import prepare_paths, run_dcm2bids
 from .fmriprep import repair_all_fieldmaps
 
 GITHUB_REPO_URL = "https://github.com/nencki-lobi/lobi-mri-scripts.git"
@@ -21,17 +21,8 @@ SCRIPTS_DIR = Path.home() / "lobi-mri-scripts"
 @click.option("-d", "--sourcedata", default=None, help="Each XNAT session is downloaded to a separate folder in this directory (default: {bids_dir}/sourcedata/)")
 @click.option("--auto_extract_entities", default=True, show_default=True, help="dcm2bids option i.e. only when False You can overwrite entities with \"custom_entities\"")
 def xnat_dcm2bids(xnat_session_ids, subject_id, session_number, output_dir, config, sourcedata, auto_extract_entities):
-    bids_dir = Path(output_dir)
 
-    if sourcedata is None:
-        sourcedata = bids_dir / "sourcedata"
-    else:
-        sourcedata = Path(sourcedata)
-
-    if config is None:
-        config = bids_dir / "code" / "config.json"
-    else:
-        config = Path(config)
+    bids_dir, sourcedata, config = prepare_paths(output_dir, sourcedata, config)
 
     for session_id in xnat_session_ids:
         click.echo(f"🟢 Downloading {session_id} to {sourcedata}")
@@ -43,7 +34,11 @@ def xnat_dcm2bids(xnat_session_ids, subject_id, session_number, output_dir, conf
             return
         
     click.echo(f"🟢 Running dcm2bids for subject {subject_id}, session {session_number}")
-    run_dcm2bids(xnat_session_ids, subject_id, session_number, config, bids_dir, sourcedata, auto_extract_entities)
+    try:
+        run_dcm2bids(xnat_session_ids, subject_id, session_number, config, bids_dir, sourcedata, auto_extract_entities)
+    except subprocess.CalledProcessError as e:
+        click.echo(f"🛑 Error running dcm2bids: {e}")
+        raise SystemExit(e.returncode)
 
     click.echo("🟢 Repairing fieldmaps...")
     repair_all_fieldmaps( bids_dir / f"sub-{subject_id}" )
