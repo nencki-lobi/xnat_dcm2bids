@@ -5,7 +5,7 @@ import sys
 
 def handle_xnat_not_configured():
     """Handle case when XNAT is not configured."""
-    click.echo("💡 XNAT not configured yet. Run 'xnat-get' to set it up.")
+    click.echo("💡 XNAT not configured yet. Run 'xnat-ls' to set it up.")
     sys.exit(1)
 
 def handle_error(message, exit_code=1):

@@ -8,13 +8,14 @@
 
 This package consists of the following modules:
 
-* **`xnat_getcsv`** – downloads a list of all sessions for a given XNAT project and saves it to a CSV file:  
+* **xnat_getcsv** – downloads a list of all sessions for a given XNAT project and saves it to a CSV file:  
 `xnat_getcsv -o mj_ris.csv mj_ris`
 
-* **`xnat_dcm2bids`** – downloads data from a selected XNAT session (e.g., `f490f566-2124-46`) and converts it to BIDS format using `dcm2bids`:  
+* **xnat_dcm2bids** – downloads data from a selected XNAT session (e.g., `f490f566-2124-46`) and converts it to BIDS format using `dcm2bids`:  
 `xnat_dcm2bids --output-dir ~/bids-dir --config ./code/config.json f490f566-2124-46 03 01`
 
-* **`lobi_script`** – a shortcut for running scripts from the [lobi-mri-scripts](https://github.com/nencki-lobi/lobi-mri-scripts) repository:  
+* **lobi_script** – a shortcut for running scripts from the [lobi-mri-scripts](https://github.com/nencki-lobi/lobi-mri-scripts) repository:  
+`lobi_script ls` - list available scripts  
 `lobi_script run_mriqc.sh 03 ~/bids-dir ~/bids-dir/derivatives/mriqc`
 
 ---
@@ -25,15 +26,15 @@ The package also leverages existing tools, which are installed automatically. So
 
 * **[dcm2bids](https://unfmontreal.github.io/Dcm2Bids/)**
 
-   * **`dcm2bids_scaffold`** – prepares a new BIDS directory:  
+   * **dcm2bids_scaffold** – prepares a new BIDS directory:  
    `dcm2bids_scaffold -o /home/jovyan/bids-dir`
 
-   * **`dcm2bids`** – converts and sorts DICOMs without downloading them from XNAT:  
+   * **dcm2bids** – converts and sorts DICOMs without downloading them from XNAT:  
    `dcm2bids -c config.json -p 01 -s 01 -o ./ -d ./sourcedata/12345678 --auto_extract_entities`
 
 * **[xnat-utils](https://github.com/Australian-Imaging-Service/xnatutils)**
 
-   * **`xnat-get`** – downloads DICOM files from XNAT; by default, downloads all files from the specified project:  
+   * **xnat-get** – downloads DICOM files from XNAT; by default, downloads all files from the specified project:  
    `xnat-get -p mj_ris -t ./sourcedata`
 
 
@@ -77,7 +78,7 @@ xnat_dcm2bids --output-dir bids-dir --config ./config.json 55b4c571-cc33-4d pilo
 ### Example: run multiple subjects
 First, download CSV list of sessions using `xnat_getcsv`:
 ```
-xnat_getcsv mj_ris.csv mj_ris
+xnat_getcsv -o mj_ris.csv mj_ris
 ```
 You will get a file like this:
 ```
@@ -106,5 +107,5 @@ for /f "usebackq skip=1 tokens=1,3,4 delims=," %A in ("subjects.csv") do xnat_dc
 
 - [troubleshooting](troubleshooting.md)
 
-
+- [lobi-mri-scripts repository](https://github.com/nencki-lobi/lobi-mri-scripts) and [quickstart tutorial](https://github.com/nencki-lobi/lobi-mri-scripts/blob/main/quickstart.ipynb)
 
