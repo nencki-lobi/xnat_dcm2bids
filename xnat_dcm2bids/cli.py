@@ -1,5 +1,6 @@
 import click
 import subprocess
+import pyxnat
 from pathlib import Path
 from .xnat_utils import download_session, savecsv
 from .dcm2bids import prepare_paths, run_dcm2bids
@@ -48,7 +49,14 @@ def xnat_dcm2bids(xnat_session_ids, subject_id, session_number, output_dir, conf
 @click.option("-o", "--output-csv", default="./list.csv", show_default=True, type=click.Path(), help="Path to output CSV file")
 def xnat_getcsv(output_csv, project_id):
     #download list of sessions from xnat
-    savecsv(output_csv, project_id)
+    try:
+        savecsv(output_csv, project_id)
+    except pyxnat.core.errors.DatabaseError as e:
+        click.echo(f"🛑 Error connecting to XNAT. Try 'xnat-ls' to establish connection.")
+        raise SystemExit(1)
+    except Exception as e:
+        click.echo(f"🛑 Error downloading list of sessions: {e}")
+        raise SystemExit(1)
     click.echo(f"🟢 Data saved to {output_csv}")
     
 @click.command(help="Run script from ~/lobi-mri-scripts/")
