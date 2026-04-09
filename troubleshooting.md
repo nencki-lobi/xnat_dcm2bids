@@ -71,6 +71,15 @@
  when False: `sub-01_ses-01_task-rest_bold_run-01.nii.gz` (custom_entities is used)
 
 ---
+
+**Problem:** Your XNAT server does not support https encryption
+
+**Solution**
+When Your XNAT server is installed internally and does not support https encryption the program will throw SSLError exception. As https prefix is already hard-coded You will need to modify the following file on Your system ``.../lib/python3.11/site-packages/xnat_dcm2bids/xnat_utils.py`` and replace https with http prefix.
+
+---
+
+
 ### Links
 - [dcm2bids](https://unfmontreal.github.io/Dcm2Bids/)
 - [xnatutils](https://github.com/Australian-Imaging-Service/xnatutils)
