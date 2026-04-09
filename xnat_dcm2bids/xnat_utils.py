@@ -81,9 +81,22 @@ def savecsv(output_path, project_id):
         xnat_id    = meta["exp_lbl"]          # etykieta sesji
         subject_id = meta["subject_lbl"]      # np. MJ_RIS_003 (to, co drukuje repr)
         insert_dt  = meta["insert_date"]      # pełny timestamp jak w "created on ..."
-        guess_code = re.sub(r'\D', '', subject_id or '')
-    
-        experiment_data.append((xnat_id, subject_id, insert_dt, guess_code))
+        
+        #match sub and ses from subject_id
+        parts = re.split(r'[_\-\s]+', subject_id or '')
+        # skip first element eg ad25a; convert remaining parts to numeric
+        numeric_parts = [re.sub(r'[A-Za-z]', '', part) for part in parts[1:]]
+        # remove empty strings
+        numeric_parts = [part for part in numeric_parts if part]
+
+        if numeric_parts:
+            guess_code = numeric_parts[0]
+            guess_sess = numeric_parts[1] if len(numeric_parts) > 1 else "1"
+        else:
+            guess_code = "NA"
+            guess_sess = "1"
+
+        experiment_data.append((xnat_id, subject_id, insert_dt, guess_code, guess_sess))
 
     if len(experiment_data) == 0:
         click.echo(f"🛑 No experiments found for project {PROJECT}")
