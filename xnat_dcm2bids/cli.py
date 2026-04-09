@@ -77,8 +77,8 @@ def lobi_script(script_name, args):
         click.echo(f"Scripts in {SCRIPTS_DIR}:")
         for script in sorted(Path(SCRIPTS_DIR).glob('*.sh')):
             click.echo(f"{script.name}")
-            #first_line = script.read_text().split('\n')[0].strip()
-            #click.echo(f"  {first_line}")
+        for script in sorted(Path(SCRIPTS_DIR).glob('*/*.sh')):
+            click.echo(f"{script.parent.name}/{script.name}")
         return
 
     if not script_path.exists():
