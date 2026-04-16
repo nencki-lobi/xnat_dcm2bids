@@ -4,7 +4,7 @@ import pyxnat
 from .xnat_utils import download_session, savecsv
 from .dcm2bids import prepare_paths, run_dcm2bids
 from .fmriprep import repair_all_fieldmaps
-from .lobi_scripts import lobi_script, lobi_scripts
+from .lobi_scripts import lobi_scripts
 
 
 @click.command(help="This tool downloads XNAT sessions and converts them to BIDS format i.e. {bids-dir}/sub-{subject_id}/ses-{session_number}/..\n"

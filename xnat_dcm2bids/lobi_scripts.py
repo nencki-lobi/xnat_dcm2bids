@@ -124,39 +124,3 @@ def lobi_scripts_diff(script_name, remote_script_name):
 
     click.echo(result.stderr.strip() or "🛑 Error running diff")
     raise SystemExit(result.returncode)
-
-
-@click.command(help="Run script from ~/lobi-mri-scripts/")
-@click.argument("script_name")
-@click.argument("args", nargs=-1)
-def lobi_script(script_name, args):
-    script_path = SCRIPTS_DIR / script_name
-
-    if not SCRIPTS_DIR.exists():
-        click.echo(f"🛑 Directory {SCRIPTS_DIR} does not exist")
-        try:
-            _install_scripts_repo()
-        except subprocess.CalledProcessError as e:
-            click.echo(f"🛑 Error installing scripts repository: {e.returncode}")
-            raise SystemExit(e.returncode)
-
-    if script_name == "ls":
-        click.echo(f"Scripts in {SCRIPTS_DIR}:")
-        for available_script in _iter_available_scripts():
-            click.echo(available_script)
-        return
-
-    if not script_path.exists():
-        click.echo(f"🛑 Script {script_name} does not exist in {SCRIPTS_DIR}")
-        raise SystemExit(1)
-
-    script_path.chmod(script_path.stat().st_mode | 0o111)
-
-    cmd = f"{script_path} {' '.join(args)}"
-    click.echo(f"▶️  Running: bash -l -c \"{cmd}\"")
-
-    try:
-        subprocess.run(["bash", "-l", "-c", cmd], check=True)
-    except subprocess.CalledProcessError as e:
-        click.echo(f"🛑 Error running script: {e.returncode}")
-        raise SystemExit(e.returncode)

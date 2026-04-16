@@ -15,7 +15,6 @@ setup(
         "console_scripts": [
             "xnat_dcm2bids=xnat_dcm2bids.cli:xnat_dcm2bids",
             "xnat_getcsv=xnat_dcm2bids.cli:xnat_getcsv",
-            "lobi_script=xnat_dcm2bids.cli:lobi_script",
             "lobi_scripts=xnat_dcm2bids.cli:lobi_scripts",
         ],
     },
