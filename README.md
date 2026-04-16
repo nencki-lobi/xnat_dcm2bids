@@ -14,9 +14,13 @@ This package consists of the following modules:
 * **xnat_dcm2bids** – downloads data from a selected XNAT session (e.g., `f490f566-2124-46`) and converts it to BIDS format using `dcm2bids`:  
 `xnat_dcm2bids --output-dir ~/bids-dir --config ./code/config.json f490f566-2124-46 03 01`
 
-* **lobi_script** – a shortcut for running scripts from the [lobi-mri-scripts](https://github.com/nencki-lobi/lobi-mri-scripts) repository:  
-`lobi_script ls` - list available scripts  
-`lobi_script run_mriqc.sh 03 ~/bids-dir ~/bids-dir/derivatives/mriqc`
+* **lobi_scripts** – manage helper scripts from the [lobi-mri-scripts](https://github.com/nencki-lobi/lobi-mri-scripts) repository used in MRI data analysis workflows:  
+`lobi_scripts` - show a short introduction and available commands  
+`lobi_scripts install` - clone the scripts repository to `~/lobi-mri-scripts`  
+`lobi_scripts ls` - list available scripts from the repository  
+`lobi_scripts add run_mriqc.sh ./` - copy a selected script to the current directory  
+`lobi_scripts update` - update the local scripts repository with `git stash` and `git pull`  
+`lobi_scripts diff ./run_mriqc.sh run_mriqc.sh` - compare a local file with its repository version
 
 ---
 
@@ -108,4 +112,3 @@ for /f "usebackq skip=1 tokens=1,3,4 delims=," %A in ("subjects.csv") do xnat_dc
 - [troubleshooting](troubleshooting.md)
 
 - [lobi-mri-scripts repository](https://github.com/nencki-lobi/lobi-mri-scripts) and [quickstart tutorial](https://github.com/nencki-lobi/lobi-mri-scripts/blob/main/quickstart.ipynb)
-
