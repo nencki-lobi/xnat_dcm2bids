@@ -33,7 +33,7 @@ class LobiScriptsTests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertIn("Scripts from the lobi-mri-scripts GitHub repository", result.output)
         self.assertIn("lobi_scripts add <script_name> [destination]", result.output)
-        self.assertIn("lobi_scripts diff <local_copy> [remote_script_name]", result.output)
+        self.assertIn("lobi_scripts diff <local_copy> [repository_script_name]", result.output)
 
     def test_ls_lists_top_level_and_nested_scripts(self):
         scripts_dir = self.tmp_path / "lobi-mri-scripts"
@@ -98,6 +98,28 @@ class LobiScriptsTests(unittest.TestCase):
             result = self.runner.invoke(
                 lobi_scripts_module.lobi_scripts,
                 ["diff", str(local_script), "nested/child.sh"],
+            )
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("-echo local", result.output)
+        self.assertIn("+echo remote", result.output)
+
+    def test_diff_uses_local_filename_when_remote_name_is_missing(self):
+        scripts_dir = self.tmp_path / "lobi-mri-scripts"
+        scripts_dir.mkdir()
+        remote_script = scripts_dir / "nested" / "run_mriqc.sh"
+        remote_script.parent.mkdir()
+        remote_script.write_text("#!/bin/bash\necho remote\n")
+
+        local_dir = self.tmp_path / "my_code"
+        local_dir.mkdir()
+        local_script = local_dir / "run_mriqc.sh"
+        local_script.write_text("#!/bin/bash\necho local\n")
+
+        with patch.object(lobi_scripts_module, "SCRIPTS_DIR", scripts_dir):
+            result = self.runner.invoke(
+                lobi_scripts_module.lobi_scripts,
+                ["diff", str(local_script)],
             )
 
         self.assertEqual(result.exit_code, 0)

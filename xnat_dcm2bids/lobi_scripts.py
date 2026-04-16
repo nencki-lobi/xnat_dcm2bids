@@ -18,8 +18,8 @@ def _print_intro():
     click.echo("  lobi_scripts install - clone the scripts repository to ~/lobi-mri-scripts")
     click.echo("  lobi_scripts ls - list available scripts from the repository")
     click.echo("  lobi_scripts add <script_name> [destination] - copy a selected script to the current or chosen directory")
-    click.echo("  lobi_scripts update - update the local scripts repository with git stash and git pull")
-    click.echo("  lobi_scripts diff <local_copy> [remote_script_name] - compare a local file with its repository version")
+    click.echo("  lobi_scripts update - update the lobi_mri_scripts repository with git stash and git pull")
+    click.echo("  lobi_scripts diff <local_copy> [repository_script_name] - compare a local file with its repository version")
 
 
 def _require_scripts_dir():
@@ -33,6 +33,24 @@ def _iter_available_scripts():
         yield script.name
     for script in sorted(SCRIPTS_DIR.glob("*/*.sh")):
         yield f"{script.parent.name}/{script.name}"
+
+
+def _find_remote_script_path(script_name):
+    direct_path = SCRIPTS_DIR / script_name
+    if direct_path.exists():
+        return direct_path
+
+    script_basename = Path(script_name).name
+
+    top_level_match = SCRIPTS_DIR / script_basename
+    if top_level_match.exists():
+        return top_level_match
+
+    for script_path in sorted(SCRIPTS_DIR.glob("*/*.sh")):
+        if script_path.name == script_basename:
+            return script_path
+
+    return None
 
 
 def _install_scripts_repo():
@@ -112,14 +130,14 @@ def lobi_scripts_diff(script_name, remote_script_name):
     _require_scripts_dir()
 
     local_path = Path(script_name).expanduser()
-    remote_name = remote_script_name or script_name
-    remote_path = SCRIPTS_DIR / remote_name
+    remote_name = remote_script_name or local_path.name
+    remote_path = _find_remote_script_path(remote_name)
 
     if not local_path.exists():
         click.echo(f"🛑 Local file {local_path} does not exist")
         raise SystemExit(1)
 
-    if not remote_path.exists():
+    if remote_path is None:
         click.echo(f"🛑 Remote script {remote_name} does not exist in {SCRIPTS_DIR}")
         raise SystemExit(1)
 
