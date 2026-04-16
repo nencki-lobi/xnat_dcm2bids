@@ -8,6 +8,20 @@ GITHUB_REPO_URL = "https://github.com/nencki-lobi/lobi-mri-scripts.git"
 SCRIPTS_DIR = Path.home() / "lobi-mri-scripts"
 
 
+def _print_intro():
+    click.echo("lobi_scripts")
+    click.echo("")
+    click.echo("Scripts from the lobi-mri-scripts GitHub repository used in our MRI data analysis workflow.")
+    click.echo(GITHUB_REPO_URL)
+    click.echo("")
+    click.echo("Available commands:")
+    click.echo("  lobi_scripts install - clone the scripts repository to ~/lobi-mri-scripts")
+    click.echo("  lobi_scripts ls - list available scripts from the repository")
+    click.echo("  lobi_scripts add <script_name> [destination] - copy a selected script to the current or chosen directory")
+    click.echo("  lobi_scripts update - update the local scripts repository with git stash and git pull")
+    click.echo("  lobi_scripts diff <local_copy> [remote_script_name] - compare a local file with its repository version")
+
+
 def _require_scripts_dir():
     if not SCRIPTS_DIR.exists():
         click.echo(f"🛑 Directory {SCRIPTS_DIR} does not exist. Run 'lobi_scripts install' first.")
@@ -34,9 +48,11 @@ def _install_scripts_repo():
     click.echo("✅ Scripts cloned.")
 
 
-@click.group(help="Manage scripts from ~/lobi-mri-scripts/")
-def lobi_scripts():
-    pass
+@click.group(invoke_without_command=True)
+@click.pass_context
+def lobi_scripts(ctx):
+    if ctx.invoked_subcommand is None:
+        _print_intro()
 
 
 @lobi_scripts.command("install")
