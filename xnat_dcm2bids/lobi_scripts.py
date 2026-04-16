@@ -7,6 +7,46 @@ GITHUB_REPO_URL = "https://github.com/nencki-lobi/lobi-mri-scripts.git"
 SCRIPTS_DIR = Path.home() / "lobi-mri-scripts"
 
 
+def _placeholder_message(command_name):
+    click.echo(f"Command 'lobi_scripts {command_name}' is not implemented yet.")
+
+
+@click.group(help="Manage scripts from ~/lobi-mri-scripts/")
+def lobi_scripts():
+    pass
+
+
+@lobi_scripts.command("install")
+def lobi_scripts_install():
+    _placeholder_message("install")
+
+
+@lobi_scripts.command("ls")
+def lobi_scripts_ls():
+    _placeholder_message("ls")
+
+
+@lobi_scripts.command("add")
+@click.argument("script_name")
+@click.argument("destination", required=False, default="./")
+def lobi_scripts_add(script_name, destination):
+    _ = (script_name, destination)
+    _placeholder_message("add")
+
+
+@lobi_scripts.command("update")
+def lobi_scripts_update():
+    _placeholder_message("update")
+
+
+@lobi_scripts.command("diff")
+@click.argument("script_name")
+@click.argument("remote_script_name", required=False)
+def lobi_scripts_diff(script_name, remote_script_name):
+    _ = (script_name, remote_script_name)
+    _placeholder_message("diff")
+
+
 @click.command(help="Run script from ~/lobi-mri-scripts/")
 @click.argument("script_name")
 @click.argument("args", nargs=-1)
